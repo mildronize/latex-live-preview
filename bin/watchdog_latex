@@ -1,0 +1,109 @@
+#!/usr/bin/python3
+# The original file by http://dev.im-bot.com/2014/07/20/watchdog/
+# /usr/bin/env python
+import os
+import sys
+import time
+from time import gmtime, strftime
+from watchdog.observers import Observer
+from watchdog.events import PatternMatchingEventHandler
+
+excluded_filenames = []
+junk_exts = ["aux", "bbl", "blg", "dvi", "log", "out", "toc"]
+
+
+def when_file_changed(filename, watchfile):
+
+    def get_basename_only(filename):
+        return os.path.splitext(filename)[0][2:]
+
+    def get_ext_file(filename):
+
+        tmp = filename.split(".")
+        return tmp[len(tmp) - 1]
+
+    def compile_latex(filename):
+        os.system("./.merge " + get_basename_only(filename))
+
+    def detect_file(filename):
+        ext = get_ext_file(filename)
+        if ext == "tex":
+            compile_latex(filename)
+        elif ext == "bib":
+            os.system("./.merge " + watchfile)
+        else:
+            print("Error! Support only *.tex , *bib")
+
+    def clear_junk():
+        # clear file if the changed file is *.tex
+        if get_ext_file(filename) == "tex":
+            bname = get_basename_only(filename)
+            for junk_ext in junk_exts:
+                os.system("rm -f " + bname + "." + junk_ext)
+
+    clear_junk()
+    cls()
+    print("-" * 30)
+    print(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime()))
+    #  print(os.path.abspath(filename))
+    # args = {"package": package(filename), "testfile": test_file(filename)}
+    # " -v {testfile}".format(**args)
+    # cmd = "nosetests --with-coverage --cover-erase --cover-package={package}"
+    #  os.system(cmd)
+    #  os.system("./a.out")
+    detect_file(filename)
+    clear_junk()
+    #  old_file = filename
+
+
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+class ModifiedHandler(PatternMatchingEventHandler):
+    patterns = ["*.tex", "*.bib"]  # Monitor only matched patterns
+    check = True
+
+    def __init__(self, watchfile):
+        super().__init__()
+        self.watchfile = watchfile
+
+    def has_excluded_filenames(self, path):
+        for filename in excluded_filenames:
+            if filename in path:
+                return True
+        return False
+
+    def on_created(self, event):
+        """" For Vim :w - not modify that deleted and created file instead. """
+        if not self.has_excluded_filenames(event.src_path):
+            when_file_changed(event.src_path, self.watchfile)
+
+    def on_modified(self, event):
+        """ For other text-editor ex.sublime """
+        if not self.has_excluded_filenames(event.src_path):
+            if self.check:
+                when_file_changed(event.src_path, self.watchfile)
+                self.check = False
+            else:
+                self.check = True
+
+if __name__ == '__main__':
+    watchfile = sys.argv[1]
+    print(watchfile)
+    #  os.system("evince " + watchfile + ".pdf&")
+    #  old_file = ""
+    event_handler = ModifiedHandler(watchfile)
+    observer = Observer()
+    #  observer.schedule(event_handler,
+    #  path=args[1] if args else '.', recursive=True)
+    observer.schedule(event_handler,
+                      path='.', recursive=True)
+    observer.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()

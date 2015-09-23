@@ -1,0 +1,9 @@
+#!/bin/bash
+# from http://tex.stackexchange.com/questions/27878/pdflatex-bash-script-to-supress-all-output-except-error-messages
+ARGUMENT="$1"
+#determine aux name by stripping .tex suffix and adding .aux
+AUXNAME="${ARGUMENT%.tex}.aux"
+pdflatex -shell-escape -interaction=nonstopmode -file-line-error "$ARGUMENT" | grep ".*:[0-9]*:.*"
+bibtex -terse "$AUXNAME"
+pdflatex -shell-escape -interaction=nonstopmode -file-line-error "$ARGUMENT" | grep ".*:[0-9]*:.*"
+pdflatex -shell-escape -interaction=nonstopmode -file-line-error "$ARGUMENT" | grep ".*:[0-9]*:.*"
