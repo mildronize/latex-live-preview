@@ -1,5 +1,5 @@
-# live-preview-latex
-Live Preview Latex with watchdog
+# Latex Live Preview
+Latex Live Preview with watchdog
 
 > Here is a first beta. It may be some bug.
 
