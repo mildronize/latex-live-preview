@@ -5,7 +5,7 @@ ARGUMENT="$1"
 AUXNAME="${ARGUMENT%.tex}.aux"
 
 # get name of bib outout in $TEMPDIR
-bib_output="$(mktemp -u -t xxx)"
+bib_output="$(mktemp -u -t)"
 
 # cmd variable
 pdflatex="pdflatex -shell-escape -interaction=nonstopmode -file-line-error $ARGUMENT"
