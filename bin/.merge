@@ -3,7 +3,34 @@
 ARGUMENT="$1"
 #determine aux name by stripping .tex suffix and adding .aux
 AUXNAME="${ARGUMENT%.tex}.aux"
-pdflatex -shell-escape -interaction=nonstopmode -file-line-error "$ARGUMENT" | grep ".*:[0-9]*:.*"
-bibtex -terse "$AUXNAME"
-pdflatex -shell-escape -interaction=nonstopmode -file-line-error "$ARGUMENT" | grep ".*:[0-9]*:.*"
-pdflatex -shell-escape -interaction=nonstopmode -file-line-error "$ARGUMENT" | grep ".*:[0-9]*:.*"
+
+# get name of bib outout in $TEMPDIR
+bib_output="$(mktemp -u -t xxx)"
+
+# cmd variable
+pdflatex="pdflatex -shell-escape -interaction=nonstopmode -file-line-error $ARGUMENT"
+bibtex="bibtex -terse $AUXNAME"
+grep_latex='grep .*:[0-9]*:.*'
+
+# compile and keep exited code of compile
+($pdflatex && $bibtex 2>&1 > $bib_output && $pdflatex && $pdflatex) | $grep_latex
+exited_code=${PIPESTATUS[0]}
+
+# print bibtex warning and error messages if output exists
+if [ -f $bib_output ];
+then
+  if grep -q "error message" $bib_output;
+  then
+    # error - show all message
+    cat $bib_output
+    exited_code=1
+  elif grep -q "Warning--" $bib_output;
+  then
+    # warning - show only warning message
+    cat $bib_output | grep "Warning--"
+    exited_code=1
+  fi
+fi
+
+# return exited code of compile
+exit $exited_code
