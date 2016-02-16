@@ -10,18 +10,24 @@ Latex Live Preview with watchdog
   is adapted from Here](http://tex.stackexchange.com/questions/27878/pdflatex-bash-script-to-supress-all-output-except-error-messages)
 - Automatic convert to pdf & clean junk files
 
-## Installation
+## Prerequisite
 
 ```bash
 $ sudo pip3 install watchdog
 ```
 
-## Setup
-- copy `bin/watchdog_latex` and `bin/.merge` into your latex project
+## Install
+1. Clone this project.
 
-  ```
-  $ cp bin/* [your latex project]
-  ```
+    ```bash
+    git clone https://github.com/mildronize/latex-live-preview.git /tmp/latex-live-preview
+    ```
+
+1. copy `bin/watchdog_latex` and `bin/.merge` into your latex project:
+
+    ```bash
+    $ cp /tmp/latex-live-preview/bin/{watchdog_latex, .merge} /path/to/your/project
+    ```
 
 ## Usage
 
