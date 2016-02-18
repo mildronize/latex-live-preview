@@ -7,7 +7,9 @@ import os
 import sys
 import time
 from time import gmtime, strftime
-from watchdog.observers import Observer
+# Fix from https://github.com/gorakhargosh/watchdog/issues/283
+#  from watchdog.observers import Observer
+from watchdog.observers.polling import PollingObserver as Observer
 from watchdog.events import PatternMatchingEventHandler
 
 excluded_filenames = []
