@@ -23,10 +23,10 @@ $ sudo pip3 install watchdog
     git clone https://github.com/mildronize/latex-live-preview.git /tmp/latex-live-preview
     ```
 
-1. copy `bin/watchdog_latex` and `bin/.merge` into your latex project:
+1. copy `bin/watchdog_latex` and `bin/topdf` into your latex project:
 
     ```bash
-    $ cp /tmp/latex-live-preview/bin/{watchdog_latex, .merge} /path/to/your/project
+    $ cp /tmp/latex-live-preview/bin/{watchdog_latex, topdf} /path/to/your/project
     ```
 
 ## Usage
