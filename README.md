@@ -20,7 +20,7 @@ Latex Live Preview with watchdog
 - Run Latex with live preview on Docker
 
     ```
-    docker run --rm -it -v "$PWD:/src" mildronize/latex-live-preview /app/watchdog_latex proposal
+    docker run --rm -it -v "$PWD:/src" mildronize/latex-live-preview /app/watchdog_latex [LATEX FILE NAME w/o extension]
     ```
 
 ## Prerequisite
