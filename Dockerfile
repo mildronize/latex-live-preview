@@ -2,8 +2,9 @@ FROM debian:jessie
 MAINTAINER Thada Wangthammang <mildronize@gmail.com>
 
 # Add for local build
-ADD sources.list /etc/apt/sources.list
+# ADD sources.list /etc/apt/sources.list
 
+# Install texlive curl pip3
 RUN apt-get -y update && \
     apt-get install -y --fix-missing \
                     curl \
@@ -20,7 +21,6 @@ RUN curl -o /app/watchdog_latex -O https://raw.githubusercontent.com/mildronize/
 RUN curl -o /app/topdf -O https://raw.githubusercontent.com/mildronize/latex-live-preview/master/bin/topdf
 RUN chmod a+x /app/watchdog_latex
 RUN chmod a+x /app/topdf
-ADD aa /app/aa
 
 WORKDIR /src
 VOLUME /src
