@@ -13,6 +13,7 @@ from watchdog.events import PatternMatchingEventHandler
 excluded_filenames = []
 junk_exts = ["aux", "bbl", "blg", "dvi", "log", "out", "toc"]
 
+running_path = os.path.dirname(os.path.realpath(__file__))
 
 def when_file_changed(filename, watchfile):
 
@@ -25,14 +26,14 @@ def when_file_changed(filename, watchfile):
         return tmp[len(tmp) - 1]
 
     def compile_latex(filename):
-        os.system("./topdf " + get_basename_only(filename))
+        os.system(running_path + "/topdf " + get_basename_only(filename))
 
     def detect_file(filename):
         ext = get_ext_file(filename)
         if ext == "tex":
             compile_latex(filename)
         elif ext == "bib":
-            os.system("./topdf " + watchfile)
+            os.system(running_path + "/topdf " + watchfile)
         else:
             print("Error! Support only *.tex , *bib")
 
@@ -47,6 +48,7 @@ def when_file_changed(filename, watchfile):
     cls()
     print("-" * 30)
     print(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime()))
+
     #  print(os.path.abspath(filename))
     # args = {"package": package(filename), "testfile": test_file(filename)}
     # " -v {testfile}".format(**args)
@@ -56,6 +58,7 @@ def when_file_changed(filename, watchfile):
     detect_file(filename)
     clear_junk()
     #  old_file = filename
+
 
 
 def cls():
