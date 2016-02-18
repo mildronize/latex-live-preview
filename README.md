@@ -10,6 +10,19 @@ Latex Live Preview with watchdog
   is adapted from Here](http://tex.stackexchange.com/questions/27878/pdflatex-bash-script-to-supress-all-output-except-error-messages)
 - Automatic convert to pdf & clean junk files
 
+## Dockerize this project
+- Build this project
+
+    ```
+    docker build -t mildronize/latex-live-preview .
+    ```
+
+- Run Latex with live preview on Docker
+
+    ```
+    docker run --rm -it -v "$PWD:/src" mildronize/latex-live-preview /app/watchdog_latex proposal
+    ```
+
 ## Prerequisite
 
 ```bash
