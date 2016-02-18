@@ -25,14 +25,14 @@ def when_file_changed(filename, watchfile):
         return tmp[len(tmp) - 1]
 
     def compile_latex(filename):
-        os.system("./.merge " + get_basename_only(filename))
+        os.system("./topdf " + get_basename_only(filename))
 
     def detect_file(filename):
         ext = get_ext_file(filename)
         if ext == "tex":
             compile_latex(filename)
         elif ext == "bib":
-            os.system("./.merge " + watchfile)
+            os.system("./topdf " + watchfile)
         else:
             print("Error! Support only *.tex , *bib")
 
